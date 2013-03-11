@@ -72,9 +72,23 @@ class OaiPmhRepository_Metadata_OaiDc extends OaiPmhRepository_Metadata_Abstract
             {
                 $this->appendNewElement($oai_dc, 
                     'dc:'.$elementName, $elementText->text);
-            }
-            // Append the browse URI to all results
-            if($elementName == 'identifier') 
+						}	
+
+						// Relation : add square_thumbnail for item
+						if($elementName == 'relation') 
+						{
+							$num_vig = item("Item Type Metadata", "page_vignette", null, $this->item);
+							if ($num_vig) {
+								$num_vig--;
+							} else {
+								$num_vig = 0;
+							}
+							$html = item_thumbnail(null, $num_vig, $this->item);
+							$img = preg_replace('/^.*src="([^"]*)".*$/', "$1", $html);
+							$this->appendNewElement($oai_dc,'dc:relation', 'vignette : '. $img);
+						}           
+						// Append the browse URI to all results
+						if($elementName == 'identifier')
             {
                 $this->appendNewElement($oai_dc, 
                     'dc:identifier', abs_item_uri($this->item));
