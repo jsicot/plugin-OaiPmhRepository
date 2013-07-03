@@ -77,13 +77,14 @@ class OaiPmhRepository_Metadata_OaiDc extends OaiPmhRepository_Metadata_Abstract
 						// Relation : add square_thumbnail for item
 						if($elementName == 'relation') 
 						{
-							$num_vig = item("Item Type Metadata", "page_vignette", null, $this->item);
+							$num_vig = metadata($this->item, array("Item Type Metadata", "page_vignette"));
+
 							if ($num_vig) {
 								$num_vig--;
 							} else {
 								$num_vig = 0;
 							}
-							$html = item_thumbnail(null, $num_vig, $this->item);
+							$html = item_image("thumbnail", null, $num_vig, $this->item);
 							$img = preg_replace('/^.*src="([^"]*)".*$/', "$1", $html);
 							$this->appendNewElement($oai_dc,'dc:relation', 'vignette : '. $img);
 						}           
